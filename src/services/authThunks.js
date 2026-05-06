@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from './axios.js';
-const registerUser = createAsyncThunk(
+export const registerUser = createAsyncThunk(
     'auth/registerUser',
     async (formDate, thunkAPI) => {
         try {
@@ -14,7 +14,7 @@ const registerUser = createAsyncThunk(
         }
     }
 );
-const loginUser = createAsyncThunk(
+export const loginUser = createAsyncThunk(
     'auth/loginUser',
     async (formData, thunkAPI) => {
         try {
@@ -28,7 +28,7 @@ const loginUser = createAsyncThunk(
         }
     }
 );
-const logoutUser = createAsyncThunk(
+export const logoutUser = createAsyncThunk(
     'auth/logoutUser',
     async (_, thunkAPI) => {
         try {

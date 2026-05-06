@@ -73,7 +73,7 @@ const authSlice = createSlice(
     }
 );
 
-const { authRequest, authSuccess, authFailure, logout, clearError } = authSlice.actions;
+// const { authRequest, authSuccess, authFailure, logout, clearError } = authSlice.actions;
 
 export const { logout, clearError } = authSlice.actions;
 export default authSlice.reducer;
