@@ -54,6 +54,11 @@ const Login = () => {
             <HiOutlineUserAdd /> Sign Up
           </NavLink>
         </div>
+        {error && (
+          <div className='bg-red-100 text-red-600 text-sm px-3 py-2 rounded-lg mb-4'>
+            {error}
+          </div>
+        )}
         <div className='flex flex-col mb-4'>
           <label htmlFor="" className="text-ml font-semibold">Email address</label>
           <input type="text" placeholder='Enter your email address' className='border rounded-lg border-gray-300 py-2 px-2' onChange={handleInput} value={formData.email} name='email' />
@@ -66,7 +71,7 @@ const Login = () => {
           <input type="text" placeholder='Enter your password' className='border-gray-300 border rounded-lg py-2 px-2' onChange={handleInput} value={formData.password} name='password' />
           <span className='absolute right-3 translate-y-9 cursor-pointer' onClick={handleChange}>{pwdhide ? <PiEyeBold /> : <PiEyeClosedBold />}  </span>
         </div>
-        <button className='bg-black w-full text-white py-2 rounded-lg cursor-pointer' type='submit' disabled={loading}>Log In</button>
+        <button className='bg-black w-full text-white py-2 rounded-lg cursor-pointer' type='submit' disabled={loading}>{loading ? 'Logging in...' : 'Log In'}</button>
         <div className='flex justify-around items-center my-5'>
           <hr className="w-5/12 border-gray-400" />
           <span className="text-gray-400 text-xs">OR</span>

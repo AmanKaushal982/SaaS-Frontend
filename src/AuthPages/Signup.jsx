@@ -39,11 +39,6 @@ const Signup = () => {
   };
   return (
     <div className='flex justify-center min-h-screen items-center'>
-      {error && (
-        <div className='bg-red-100 text-red-600 text-sm px-3 py-2 rounded-lg mb-4'>
-          {error}
-        </div>
-      )}
       <form action="" className='shadow-[0_0_1px_rgba(0,0,0,0.5)] border border-gray-400 rounded-2xl w-full sm:w-6/12 h-full p-6 mx-5' onSubmit={handleSubmit}>
         <div className="flex justify-center gap-3 mb-4">
           <NavLink to="/"
@@ -68,6 +63,11 @@ const Signup = () => {
           <span className="text-gray-400 text-xs">OR</span>
           <hr className="w-5/12 border-gray-400" />
         </div>
+        {error && (
+          <div className='bg-red-100 text-red-600 text-sm px-3 py-2 rounded-lg mb-4'>
+            {error}
+          </div>
+        )}
         <div className='flex flex-col mb-4'>
           <label htmlFor="" className="text-ml font-semibold">Email address</label>
           <input type="text" placeholder='Enter your email address' className='border rounded-lg border-gray-300 py-2 px-2' onChange={handleInput} value={formData.email} name='email' />
