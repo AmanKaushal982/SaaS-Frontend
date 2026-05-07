@@ -42,3 +42,17 @@ export const logoutUser = createAsyncThunk(
         }
     }
 );
+export const getMe = createAsyncThunk(
+    'auth/getMe',
+    async (_, thunkAPI) => {
+        try {
+            const response = await api.get('/auth/me');
+            return response.data;
+        }
+        catch (err) {
+            return thunkAPI.rejectWithValue(
+                err.response?.data?.message || 'Session expired'
+            );
+        }
+    }
+);

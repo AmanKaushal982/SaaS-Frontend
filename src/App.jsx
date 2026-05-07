@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
+import { getMe } from './services/authThunks.js';
+import { useDispatch } from 'react-redux';
 
-function App() {
-
-  return (
-    <>
-      <h1>Hello!</h1>
-      <Outlet />
-    </>
-  )
+const App = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getMe());
+  }, []);
+  return <Outlet />;
 }
 
 export default App
