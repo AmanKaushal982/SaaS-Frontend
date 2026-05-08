@@ -12,6 +12,7 @@ import Analytics from './pages/Analytics.jsx';
 import Settings from './pages/Settings.jsx';
 import Tasks from './pages/Tasks.jsx';
 import Admin from './pages/Admin.jsx';
+import DashboardLayout from './layouts/DashboardLayout.jsx';
 
 const router = createBrowserRouter([
     {
@@ -21,45 +22,19 @@ const router = createBrowserRouter([
             { index: true, element: <Login /> },
             { path: 'signup', element: <Signup /> },
             {
-                path: 'dashboard',
                 element: (
                     <ProtectedRoute>
-                        <Dashboard />
+                        <DashboardLayout />
                     </ProtectedRoute>
-                )
-            },
-            {
-                path: 'tasks',
-                element: (
-                    <ProtectedRoute>
-                        <Tasks />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'analytics',
-                element: (
-                    <ProtectedRoute>
-                        <Analytics />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'settings',
-                element: (
-                    <ProtectedRoute>
-                        <Settings />
-                    </ProtectedRoute>
-                )
-            },
-            {
-                path: 'admin',
-                element: (
-                    <ProtectedRoute>
-                        <Admin />
-                    </ProtectedRoute>
-                )
-            },
+                ),
+                children: [
+                    { path: 'dashboard', element: <Dashboard /> },
+                    { path: 'tasks', element: <Tasks /> },
+                    { path: 'analytics', element: <Analytics /> },
+                    { path: 'settings', element: <Settings /> },
+                    { path: 'admin', element: <Admin /> },
+                ]
+            }, d
         ],
     },
 ]);
