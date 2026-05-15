@@ -35,9 +35,11 @@ const Tasks = () => {
             <div className='bg-white rounded-xl shadow-sm'>
                 {filteredTasks.map((task) => {
                     <div key={task._id}>
-                        <div>
-                            <p>{task.title}</p>
-
+                        <div className='flex-1'>
+                            <p className='text-sm font-medium text-gray-800'>{task.title}</p>
+                            {task.dueDate && (
+                                <p className='text-xs text-gray-400 mt-1'>Due: {new Date(task.dueDate).toLocaleDateString()}</p>
+                            )}
                         </div>
                     </div>
                 })}
