@@ -13,6 +13,7 @@ import Settings from './pages/Settings.jsx';
 import Tasks from './pages/Tasks.jsx';
 import Admin from './pages/Admin.jsx';
 import DashboardLayout from './layouts/DashboardLayout.jsx';
+import TaskDetail from './pages/TaskDetail.jsx';
 
 const router = createBrowserRouter([
     {
@@ -33,8 +34,10 @@ const router = createBrowserRouter([
                     { path: 'analytics', element: <Analytics /> },
                     { path: 'settings', element: <Settings /> },
                     { path: 'admin', element: <Admin /> },
+                    { path: 'tasks', element: <Tasks /> },
+                    { path: 'taskdetail', element: <TaskDetail /> }
                 ]
-            }, d
+            },
         ],
     },
 ]);

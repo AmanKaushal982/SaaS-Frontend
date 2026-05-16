@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchTasks, createTasks, updateTasks, deleteTasks } from '../../services/taskThunks.js';
+import { fetchTasks, createTasks, updateTasks, deleteTasks, getTaskById } from '../../services/taskThunks.js';
 
 const initialState = {
     tasks: [],
     loading: false,
     error: null,
+    selectedTask: null,
     filters: {
         status: 'all',
         priority: 'all'
@@ -46,9 +47,26 @@ const taskSlice = createSlice({
             if (index !== -1) {
                 state.tasks[index] = action.payload.task;
             }
+            if (state.selectedtask?._id === action.payload.task._id) {
+                state.selectedTask = action.payload.task;
+            }
         })
         builder.addCase(deleteTask.fulfilled, (state, action) => {
             state.tasks = state.tasks.filter((t) => t._id !== action.payload);
         })
+        builder.addCase(getTaskById.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+            .addCase(getTaskById.fulfilled, (state, action) => {
+                state.loading = false;
+                state.selectedTask = action.payload.task;
+            })
+            .addCase(getTaskById.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
     }
-})
+});
+export const { setStatusFilter, setPriorityFilter, clearTaskError } = taskSlice.actions;
+export default taskSlice.reducer;

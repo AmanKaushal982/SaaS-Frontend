@@ -57,3 +57,17 @@ export const deleteTask = createAsyncThunk(
         }
     }
 );
+export const getTaskById = createAsyncThunk(
+    'tasks/getTaskById',
+    async (id, thunkAPI) => {
+        try {
+            const response = await api.get(`/tasks/${id}`);
+            return response.data;
+        }
+        catch (err) {
+            return thunkAPI.rejectWithValue(
+                err.response?.data?.message || 'Failed to fetch task'
+            );
+        }
+    }
+);

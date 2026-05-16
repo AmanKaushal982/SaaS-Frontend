@@ -7,6 +7,7 @@ import {
   setPriorityFilter,
 } from "../store/slices/taskSlice.js";
 import TaskModal from "../components/TaskModal.jsx";
+import { Link } from 'react-router-dom';
 
 const Tasks = () => {
   const dispatch = useDispatch();
@@ -20,10 +21,9 @@ const Tasks = () => {
     <button
       onClick={onClick}
       className={`px-3 py-1 rounded-full text-sm font-medium cursor-pointer transition-colors
-        ${
-          active
-            ? "bg-gray-900 text-white"
-            : "bg-white text-gray-600 border border-gray-300 hover:bg-gray-50"
+        ${active
+          ? "bg-gray-900 text-white"
+          : "bg-white text-gray-600 border border-gray-300 hover:bg-gray-50"
         }`}
     >
       {label}
@@ -125,9 +125,9 @@ const Tasks = () => {
               >
                 {/* Left title + Date */}
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-800">
+                  <Link className="text-sm font-medium text-gray-800 hover:text-blue-600 hover:underline" to={`/tasks/${task._id}`}>
                     {task.title}
-                  </p>
+                  </Link>
                   {task.dueDate && (
                     <p className="text-xs text-gray-400 mt-1">
                       Due: {new Date(task.dueDate).toLocaleDateString()}
