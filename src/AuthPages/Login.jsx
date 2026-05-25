@@ -13,6 +13,10 @@ const Login = () => {
     email: '',
     password: ''
   });
+  const [validationErrors, setValidationErrors] = useState({
+    email: '',
+    password: ''
+  });
   const [pwdhide, setPwdhide] = useState(false);
   const dispatch = useDispatch();
   const { loading, error } = useSelector(
@@ -27,10 +31,28 @@ const Login = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+    setValidationErrors({ ...validationErrors, [e.target.name]: '' });
     if (error) dispatch(clearError());
   };
+  const validate = () => {
+    const errors = {};
+    if (!formData.email) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = 'Enter a valid email address';
+    }
+    if (!formData.password) {
+      errors.password = 'Password is required';
+    }
+    return errors;
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errors = validate();
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
     const result = await dispatch(loginUser(formData));
     if (loginUser.fulfilled.match(result)) {
       Navigate('/dashboard', { replace: true })
@@ -61,15 +83,27 @@ const Login = () => {
         )}
         <div className='flex flex-col mb-4'>
           <label htmlFor="" className="text-ml font-semibold">Email address</label>
-          <input type="text" placeholder='Enter your email address' className='border rounded-lg border-gray-300 py-2 px-2' onChange={handleInput} value={formData.email} name='email' />
+          <input type="text" placeholder='Enter your email address' className={`border rounded-lg py-2 px-2 ${validationErrors.email ? 'border-red-400' : 'border-gray-300'
+            }`} onChange={handleInput} value={formData.email} name='email' />
+          {validationErrors.email && (
+            <span className='text-red-500 text-xs mt-1'>
+              {validationErrors.email}
+            </span>
+          )}
         </div>
         <div className='flex flex-col mb-4 relative'>
           <div className='flex justify-between'>
             <label htmlFor="" className="text-ml font-semibold">Password</label>
             <label htmlFor="" className="text-ml font-semibold">Forget password?</label>
           </div>
-          <input type="text" placeholder='Enter your password' className='border-gray-300 border rounded-lg py-2 px-2' onChange={handleInput} value={formData.password} name='password' />
+          <input type="text" placeholder='Enter your password' className={`border rounded-lg py-2 px-2 ${validationErrors.password ? 'border-red-400' : 'border-gray-300'
+            }`} onChange={handleInput} value={formData.password} name='password' />
           <span className='absolute right-3 translate-y-9 cursor-pointer' onClick={handleChange}>{pwdhide ? <PiEyeBold /> : <PiEyeClosedBold />}  </span>
+          {validationErrors.password && (
+            <span className='text-red-500 text-xs mt-1'>
+              {validationErrors.password}
+            </span>
+          )}
         </div>
         <button className='bg-black w-full text-white py-2 rounded-lg cursor-pointer' type='submit' disabled={loading}>{loading ? 'Logging in...' : 'Log In'}</button>
         <div className='flex justify-around items-center my-5'>
