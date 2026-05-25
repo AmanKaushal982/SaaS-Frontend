@@ -55,18 +55,18 @@ const TaskModal = ({ isOpen, onClose, editTask }) => {
                 <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                     <div className='flex flex-col gap-1'>
                         <label className='text-sm font-medium text-gray-700'>Title</label>
-                        <input type="text" name='title' value={ } onChange={handleInput} placeholder='Task title' required className='border border=gray-300 rounded-lg px-3 py-2 text-sm' />
+                        <input type="text" name='title' value={formData.title} onChange={handleInput} placeholder='Task title' required className='border border=gray-300 rounded-lg px-3 py-2 text-sm' />
                     </div>
                     <div className='flex flex-col gap-1'>
                         <label className='text-sm font-medium text-gray-700'>
                             Description
                         </label>
-                        <textarea name="description" value={ } onChange={handleInput} rows={3} placeholder='Task description(optional)' className='border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none'></textarea>
+                        <textarea name="description" value={formData.description} onChange={handleInput} rows={3} placeholder='Task description(optional)' className='border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none'></textarea>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                         <div className='flex flex-col gap-1'>
                             <label className='text-sm font-medium text-gray-700'>Status</label>
-                            <select name="status" value={ } onChange={handleInput} className='border border-gray-300 rounded-lg px-3 py-2 text-sm'>
+                            <select name="status" value={formData.status} onChange={handleInput} className='border border-gray-300 rounded-lg px-3 py-2 text-sm'>
                                 <option value="pending">Pending</option>
                                 <option value="in-progress">In Progress</option>
                                 <option value="completed">Completed</option>
