@@ -1,6 +1,7 @@
 import { StatCard } from '../components/StatCard.jsx';
 import { StatusBadge, PriorityBadge } from '../components/Badges';
 import useDashboardStats from '../hooks/useDashboardStats';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
     const { stats, recentTasks, loading } = useDashboardStats();
