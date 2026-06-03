@@ -2,14 +2,15 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from './axios.js';
 export const registerUser = createAsyncThunk(
     'auth/registerUser',
-    async (formDate, thunkAPI) => {
+    async (finalPayload, thunkAPI) => {
         try {
-            const response = await api.post('/auth/register', formData);
+            const response = await api.post('/auth/register', finalPayload);
             return response.data;
         }
         catch (err) {
+            const data = err.response?.data;
             return thunkAPI.rejectWithValue(
-                err.response?.data?.message || 'Registration failed'
+                data?.errors || data?.message || 'Registration failed'
             );
         }
     }
@@ -22,8 +23,9 @@ export const loginUser = createAsyncThunk(
             return response.data;
         }
         catch (err) {
+            const data = err.response?.data;
             return thunkAPI.rejectWithValue(
-                err.response?.data?.message || 'Login failed'
+                data?.errors || data?.message || 'Login failed'
             );
         }
     }
@@ -56,3 +58,33 @@ export const getMe = createAsyncThunk(
         }
     }
 );
+export const oauthLogin = createAsyncThunk(
+    'auth/oauthLogin',
+    async (formData, thunkAPI) => {
+        try {
+            const response = await api.post('/auth/oauth', formData);
+            return response.data;
+        }
+        catch (err) {
+            const data = err.response?.data;
+            return thunkAPI.rejectWithValue(
+                data?.errors || data?.message || 'OAuth login failed'
+            );
+        }
+    }
+);
+export const forgotPassword = createAsyncThunk(
+    'auth/forgotPassword',
+    async (formData, thunkAPI) => {
+        try {
+            const response = await api.post('/auth/forgot', formData);
+            return response.data;
+        }
+        catch (err) {
+            const data = err.response?.data;
+            return thunkAPI.rejectWithValue(
+                data?.errors || data?.message || 'password reset failed'
+            )
+        }
+    }
+)

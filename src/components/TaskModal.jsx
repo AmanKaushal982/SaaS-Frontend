@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createThunk, updateThunk } from '../services/taskThunks';
+import { createTask, updateTask } from '../services/taskThunks';
 import { useDispatch } from 'react-redux';
 
 const TaskModal = ({ isOpen, onClose, editTask }) => {

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { registerUser, loginUser, logoutUser, getMe, updateProfile, updatePassword } from '../../services/authThunks.js';
+import { registerUser, loginUser, logoutUser, getMe, oauthLogin } from '../../services/authThunks.js';
 import { updateProfile, updatePassword } from '../../services/settingsThunks.js';
 
 const initialState = {
@@ -51,7 +51,12 @@ const authSlice = createSlice(
                 })
                 .addCase(registerUser.rejected, (state, action) => {
                     state.loading = false;
-                    state.error = action.payload;
+                    if (typeof action.payload === 'object') {
+                        state.error = Object.values(action.payload)[0];
+                    }
+                    else {
+                        state.error = action.payload;
+                    }
                 })
             builder.addCase(loginUser.pending, (state) => {
                 state.loading = true;
@@ -63,6 +68,23 @@ const authSlice = createSlice(
                     state.isAuthenticated = true;
                 })
                 .addCase(loginUser.rejected, (state, action) => {
+                    state.loading = false;
+                    if (typeof action.payload === 'object') {
+                        state.error = Object.values(action.payload)[0];
+                    } else {
+                        state.error = action.payload;
+                    }
+                })
+            builder.addCase(oauthLogin.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+                .addCase(oauthLogin.fulfilled, (state, action) => {
+                    state.loading = false;
+                    state.user = action.payload.user;
+                    state.isAuthenticated = true;
+                })
+                .addCase(oauthLogin.rejected, (state, action) => {
                     state.loading = false;
                     state.error = action.payload;
                 })

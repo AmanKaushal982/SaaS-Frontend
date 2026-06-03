@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchTasks, createTasks, updateTasks, deleteTasks, getTaskById } from '../../services/taskThunks.js';
+import { fetchTasks, createTask, updateTask, deleteTask, getTaskById } from '../../services/taskThunks.js';
 
 const initialState = {
     tasks: [],

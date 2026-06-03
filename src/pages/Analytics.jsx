@@ -1,10 +1,10 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTasks } from "../services/taskThunks.js";
-import {
-  PRIORITY_COLORS,
-  STATUS_COLORS,
-} from "../components/AnalyticsCharts.jsx";
+// import {
+//   PRIORITY_COLORS,
+//   STATUS_COLORS,
+// } from "../components/AnalyticsCharts.jsx";
 import { StatusChart, PriorityChart, TimelineChart } from "../components/AnalyticsCharts.jsx";
 
 const STATUS_COLORS = { pending: "#facc15", "in-progress": "#60a5fa", completed: "#4ade80", overdue: "#f87171" };
@@ -31,7 +31,7 @@ const Analytics = () => {
       </div>
     );
   };
-  export const StatusData = useMemo(() => {
+  const StatusData = useMemo(() => {
     const counts = { pending: 0, 'in-progress': 0, completed: 0, overdue: 0 };
     tasks.forEach((task) => {
       if (counts[task.status] !== undefined) {
@@ -40,7 +40,7 @@ const Analytics = () => {
     });
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
   }, [tasks]);
-  export const PriorityData = useMemo(() => {
+  const PriorityData = useMemo(() => {
     const counts = { low: 0, medium: 0, high: 0 };
     tasks.forEach((task) => {
       if (counts[task.priority] !== undefined) {
@@ -49,7 +49,7 @@ const Analytics = () => {
     });
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
   }, [tasks]);
-  export const TimeLineData = useMemo(() => {
+  const TimeLineData = useMemo(() => {
     const counts = {};
     tasks.forEach((task) => {
       const date = new Date(task.createdAt).toLocaleDateString('en-GB', {

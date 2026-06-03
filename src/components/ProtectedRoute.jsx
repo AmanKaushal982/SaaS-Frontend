@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children }) => {
     if (!isAuthenticated) {
         return <Navigate to="/" replace />;
     }
-    return Children;
+    return children;
 }
 
 export default ProtectedRoute

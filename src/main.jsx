@@ -3,8 +3,8 @@ import './index.css'
 import App from './App.jsx';
 import { Provider } from 'react-redux';
 import store from './store/store.js';
-import Signup from './AuthPages/Signup';
-import Login from './AuthPages/Login';
+import Signup from './AuthPages/Signup.jsx';
+import Login from './AuthPages/Login.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Dashboard from './pages/Dashboard.jsx';
@@ -14,6 +14,7 @@ import Tasks from './pages/Tasks.jsx';
 import Admin from './pages/Admin.jsx';
 import DashboardLayout from './layouts/DashboardLayout.jsx';
 import TaskDetail from './pages/TaskDetail.jsx';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const router = createBrowserRouter([
     {
@@ -43,6 +44,8 @@ const router = createBrowserRouter([
 ]);
 createRoot(document.getElementById('root')).render(
     <Provider store={store}>
-        <RouterProvider router={router} />
+        <GoogleOAuthProvider clientId="471073544394-nm22t5bnngj8aajng5vcj5prpu6ngd2d.apps.googleusercontent.com">
+            <RouterProvider router={router} />
+        </GoogleOAuthProvider>
     </Provider>
 );

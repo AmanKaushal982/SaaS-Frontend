@@ -3,36 +3,26 @@ import { FaApple, FaGoogle } from "react-icons/fa";
 import { MdLogin } from "react-icons/md";
 import { HiOutlineUserAdd } from "react-icons/hi";
 import { PiEyeBold, PiEyeClosedBold } from "react-icons/pi"
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../services/authThunks.js';
 import { clearError } from '../store/slices/authSlice.js';
+import authBackground from '../assets/authBackground.png';
+import { oauthLogin } from '../services/authThunks.js';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
-  const [validationErrors, setValidationErrors] = useState({
-    email: '',
-    password: ''
-  });
-  const [pwdhide, setPwdhide] = useState(false);
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [validationErrors, setValidationErrors] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
-  const { loading, error } = useSelector(
-    (state) => state.auth
-  );
+  const { loading, error } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const handleChange = () => {
-    setPwdhide(prevState => !prevState)
-  };
+  const handleShowPassword = () => { setShowPassword(!showPassword) };
   const handleInput = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
     setValidationErrors({ ...validationErrors, [e.target.name]: '' });
-    if (error) dispatch(clearError());
+
   };
   const validate = () => {
     const errors = {};
@@ -48,6 +38,7 @@ const Login = () => {
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (error) dispatch(clearError());
     const errors = validate();
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
@@ -55,13 +46,34 @@ const Login = () => {
     }
     const result = await dispatch(loginUser(formData));
     if (loginUser.fulfilled.match(result)) {
-      Navigate('/dashboard', { replace: true })
+      navigate('/dashboard', { replace: true })
     }
   };
-
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+        });
+        const userInfo = await response.json();
+        const result = await dispatch(oauthLogin({
+          email: userInfo.email,
+          providerId: userInfo.sub,
+          authProvider: 'google'
+        }));
+        if (oauthLogin.fulfilled.match(result)) {
+          navigate('/dashboard', { replace: true });
+        }
+      }
+      catch (err) {
+        console.log('Failed to fetch user info', err);
+      }
+    },
+    onError: () => console.log('Google Login Failed')
+  });
   return (
-    <div className='flex justify-center min-h-screen items-center'>
-      <form action="" className='shadow-[0_0_1px_rgba(0,0,0,0.5)] border border-gray-400 rounded-2xl w-full sm:w-6/12 h-full p-6 mx-5' onSubmit={handleSubmit}>
+    <div style={{ backgroundImage: `url(${authBackground})` }} className='flex justify-center min-h-screen items-center'>
+      <form className='shadow-[0_0_1px_rgba(0,0,0,0.5)] border border-gray-400 rounded-2xl w-full sm:w-6/12 h-full p-6 mx-5 bg-white' onSubmit={handleSubmit}>
         <div className="flex justify-center gap-3 mb-4">
           <NavLink to="/"
             type="button"
@@ -82,8 +94,8 @@ const Login = () => {
           </div>
         )}
         <div className='flex flex-col mb-4'>
-          <label htmlFor="" className="text-ml font-semibold">Email address</label>
-          <input type="text" placeholder='Enter your email address' className={`border rounded-lg py-2 px-2 ${validationErrors.email ? 'border-red-400' : 'border-gray-300'
+          <label htmlFor="email" className="text-ml font-semibold">Email address</label>
+          <input type="text" id='email' placeholder='Enter your email address' className={`border rounded-lg py-2 px-2 ${validationErrors.email ? 'border-red-400' : 'border-gray-300'
             }`} onChange={handleInput} value={formData.email} name='email' />
           {validationErrors.email && (
             <span className='text-red-500 text-xs mt-1'>
@@ -93,12 +105,12 @@ const Login = () => {
         </div>
         <div className='flex flex-col mb-4 relative'>
           <div className='flex justify-between'>
-            <label htmlFor="" className="text-ml font-semibold">Password</label>
-            <label htmlFor="" className="text-ml font-semibold">Forget password?</label>
+            <label htmlFor="password" className="text-ml font-semibold">Password</label>
+            <label className="text-ml font-semibold"><Link to="/forget-password">Forget password?</Link></label>
           </div>
-          <input type="text" placeholder='Enter your password' className={`border rounded-lg py-2 px-2 ${validationErrors.password ? 'border-red-400' : 'border-gray-300'
+          <input type={showPassword ? 'text' : 'password'} id='password' autoComplete="new-password" placeholder='Enter your password' className={`border rounded-lg py-2 px-2 ${validationErrors.password ? 'border-red-400' : 'border-gray-300'
             }`} onChange={handleInput} value={formData.password} name='password' />
-          <span className='absolute right-3 translate-y-9 cursor-pointer' onClick={handleChange}>{pwdhide ? <PiEyeBold /> : <PiEyeClosedBold />}  </span>
+          <span className='absolute right-3 translate-y-9 cursor-pointer' onClick={handleShowPassword}>{showPassword ? <PiEyeBold /> : <PiEyeClosedBold />}  </span>
           {validationErrors.password && (
             <span className='text-red-500 text-xs mt-1'>
               {validationErrors.password}
@@ -112,9 +124,7 @@ const Login = () => {
           <hr className="w-5/12 border-gray-400" />
         </div>
         <div className='flex flex-col gap-3'>
-          <button className='flex justify-center items-center gap-2 border-gray-300 border py-2 rounded-lg font-semibold cursor-pointer'><FaGoogle />Continue with Google</button>
-          <button className='flex justify-center items-center gap-2 border-gray-300 border py-2 rounded-lg font-semibold cursor-pointer'><FaApple />Continue with Apple</button>
-
+          <button type='button' className='flex justify-center items-center gap-2 border-gray-300 border py-2 rounded-lg font-semibold cursor-pointer' onClick={() => handleGoogleLogin()}><FaGoogle />Continue with Google</button>
         </div>
         <div className='flex justify-center mt-4'>
           <span className='text-md'>Don't have an account yet? <NavLink to="/signup" className='cursor-pointer font-semibold underline'>Signup</NavLink></span>
