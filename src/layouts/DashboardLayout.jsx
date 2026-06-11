@@ -3,7 +3,7 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 const DashboardLayout = () => {
     return (
-        <div className='flex min-h-screen bg-gray-100'>
+        <div className='flex min-h-screen bg-bg'>
             <Sidebar />
             <div className='flex flex-col flex-1'>
                 <Header />

@@ -15,20 +15,16 @@ import Admin from './pages/Admin.jsx';
 import DashboardLayout from './layouts/DashboardLayout.jsx';
 import TaskDetail from './pages/TaskDetail.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import PublicRoute from './components/PublicRoute.jsx';
 
 const router = createBrowserRouter([
     {
-        path: '/',
-        element: <App />,
+        path: '/', element: <App />,
         children: [
-            { index: true, element: <Login /> },
-            { path: 'signup', element: <Signup /> },
+            { index: true, element: <PublicRoute><Login /></PublicRoute> },
+            { path: 'signup', element: <PublicRoute><Signup /></PublicRoute> },
             {
-                element: (
-                    <ProtectedRoute>
-                        <DashboardLayout />
-                    </ProtectedRoute>
-                ),
+                element: <ProtectedRoute><DashboardLayout /></ProtectedRoute>,
                 children: [
                     { path: 'dashboard', element: <Dashboard /> },
                     { path: 'tasks', element: <Tasks /> },

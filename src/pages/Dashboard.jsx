@@ -2,22 +2,19 @@ import { StatCard } from '../components/StatCard.jsx';
 import { StatusBadge, PriorityBadge } from '../components/Badges';
 import useDashboardStats from '../hooks/useDashboardStats';
 import { Link } from 'react-router-dom';
+import useCurrentDate from '../hooks/useCurrentDate.js';
+import { useSelector } from 'react-redux';
 
 const Dashboard = () => {
     const { stats, recentTasks, loading } = useDashboardStats();
+    const { user } = useSelector((state) => state.auth);
+    const displayName = user?.name || user?.email || 'there';
+    const today = useCurrentDate();
 
     return (
         <div className='space-y-6'>
             <div>
-                <h2 className='text-2xl font-bold text-gray-800'>Dashboard</h2>
-                <p className='text-gray-500 text-sm mt-1'>What's happening in your workspace</p>
-            </div>
-
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
-                <StatCard label='Total Tasks' value={stats.total} color='border-blue-500' />
-                <StatCard label='Completed' value={stats.completed} color='border-green-500' />
-                <StatCard label='Pending' value={stats.pending} color='border-yellow-500' />
-                <StatCard label='Overdue' value={stats.overdue} color='border-red-500' />
+                <StatCard />
             </div>
 
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-4'>

@@ -52,8 +52,9 @@ export const getMe = createAsyncThunk(
             return response.data;
         }
         catch (err) {
+            const data = err.response?.data;
             return thunkAPI.rejectWithValue(
-                err.response?.data?.message || 'Session expired'
+                data?.errors || data?.message || 'Session expired'
             );
         }
     }
